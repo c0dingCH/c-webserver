@@ -25,6 +25,11 @@ file(GLOB SRC_TIMER timer/*.cpp)
 file(GLOB SRC_LOG log/*.cpp)
 set(SRC_ALL ${SRC_BASE} ${SRC_TCP} ${SRC_HTTP} ${SRC_TIMER} ${SRC_LOG})
 
+#添加动态库
+add_library(webserver ${SRC_ALL})
+target_link_libraries(webserver ${CMAKE_THREAD_LIBS_INIT})
+
+
 # 设置可执行文件输出路径
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/test/)
 
@@ -34,7 +39,7 @@ file(GLOB TESTS test/*.cpp)
 # 遍历每个测试文件，生成对应的可执行文件
 foreach(test_file ${TESTS})
     get_filename_component(test_name ${test_file} NAME_WE)  # 去掉路径和扩展名
-    add_executable(${test_name} ${test_file} ${SRC_ALL})
-    target_link_libraries(${test_name} ${CMAKE_THREAD_LIBS_INIT})
+    add_executable(${test_name} ${test_file})
+    target_link_libraries(${test_name} webserver)
 endforeach()
 
