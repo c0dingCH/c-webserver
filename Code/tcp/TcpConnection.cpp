@@ -90,13 +90,15 @@ void TcpConnection::HandleWrite(){
 void TcpConnection::HandleClose(){
   if(state_ != State::Closed){
     state_ = State::Closed;
-    
-    //std::cout<<"client fd: "<<GetFd()<<" Closed "<<std::endl;
+
+    std::cout<<"client fd : "<<connfd_<<"is closing"<<std::endl;
     
     channel_ -> DisableAll();
     if(on_close_){ 
       on_close_(shared_from_this());
     }
+    
+    std::cout<<"client fd: "<<connfd_<<" Closed "<<std::endl;
   }
 }       
 
